@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,8 +73,9 @@ public class CSVReader {
         if (StringUtils.isBlank(projectStr) || projectStr.equalsIgnoreCase("NULL"))
             return null;
 
-        LocalDate from = DateParser.parseFreeFormat(record.get("DateFrom"));
-        LocalDate to = DateParser.parseFreeFormat(record.get("DateTo"));
+        DateParser dateParser = new DateParser(Clock.systemDefaultZone());
+        LocalDate from = dateParser.parseFreeFormat(record.get("DateFrom"));
+        LocalDate to = dateParser.parseFreeFormat(record.get("DateTo"));
         if (from.isAfter(to))
             return null;
 

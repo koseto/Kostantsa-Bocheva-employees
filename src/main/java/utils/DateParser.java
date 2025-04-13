@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DateParser {
-    private static final Clock clock = Clock.systemDefaultZone();
+    private final Clock clock;
 
     private static final Pattern[] DATE_AS_TEXT_PATTERNS = {
             Pattern.compile("(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\s+([0-9]{1,2})(?:st|nd|rd|th)?\\s*,?\\s*([0-9]{4})",
@@ -44,7 +44,11 @@ public class DateParser {
             DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH)
     };
 
-    public static LocalDate parseFreeFormat(String dateStr) {
+    public DateParser(final Clock clock) {
+        this.clock = clock;
+    }
+
+    public LocalDate parseFreeFormat(String dateStr) {
         if (StringUtils.isBlank(dateStr) || dateStr.equalsIgnoreCase("NULL")) {
             return LocalDate.now(clock);
         }
